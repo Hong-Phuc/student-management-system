@@ -1,0 +1,17 @@
+# Virtual environment
+venv/
+
+# Thư mục pycache
+__pycache__/
+
+# Tệp cài đặt và môi trường
+*.pyc
+*.pyo
+*.pyd
+
+# Tệp cấu hình IDE, editor
+.vscode/
+.idea/
+
+# Thư mục môi trường conda (nếu có)
+.env/
