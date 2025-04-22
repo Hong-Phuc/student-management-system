@@ -36,7 +36,6 @@ Edit
 2. Run the application:
    ```
    python main.py
-   
 Note:
 
 All data is stored locally using SQLite
