@@ -1,45 +1,56 @@
-# student-management-system
+# Student Management System
 
-> A desktop application for managing student information  
-> Developed as a final project for the *Specialized Project* course (Đồ án chuyên ngành)
+> A desktop application for managing student data imported from Excel files.  
+> Developed as a personal project for the *Specialized Project* course.
 
 ## 📌 Features
 
-- Add, update, delete student records
-- Import student data from Excel files
-- Search and sort students by various fields
-- Filter students by class and subject
-- Undo/Redo support
-- Send emails to students
-- Persistent storage using SQLite
-- GUI built with Tkinter
-
-## 🧠 Technologies Used
-
-- **Python 3**
-- **Tkinter** for GUI
-- **SQLite** for database
-- **openpyxl / pandas** for Excel handling
-- **smtplib** for sending emails
+- 🔐 User login and registration
+- 📁 Import student data from Excel files
+- 📋 Display student info in a table:
+  - Full name
+  - Class
+  - Days absent
+  - Class ID
+  - Student ID
+- 🔍 Search and sort students
+- ✏️ Edit and save student information
+- ❌ Delete student entries
+- 📧 Send warning emails to students with excessive absences
+- 💾 Data persistence with SQLite
 
 ## 🗂️ Project Structure
 
-project_root/
- │ ├── main.py # Entry point 
- ├── ui/ # UI components (buttons, layout...) 
- ├── models/ # Logic for data handling (CRUD, search, sort...) 
- ├── db/ # Database initialization and queries 
- ├── assets/ # Icons, images, Excel templates (optional) 
- └── README.md
+project_root/ │ ├── main.py # Entry point ├── ui/ # UI components (login, main screen, buttons) ├── models/ # Business logic: CRUD, search, sort, etc. ├── db/ # SQLite database logic ├── data/ # Excel files used for import ├── requirements.txt └── README.md
 
- ## 🚀 Getting Started
+markdown
+Copy
+Edit
 
-1. **Install dependencies** (if not already):
+## 🚀 Getting Started
+
+1. **Install dependencies**:
    ```bash
-   pip install pandas openpyxl
+   pip install -r requirements.txt
+   
+2. Run the application:
+   ```
+   python main.py
+   
+Note:
 
-2. Run the app:
-    ```
-    python main.py
+All data is stored locally using SQLite
 
-Note: This project does not require an internet connection, all data is saved locally in SQLite.
+The data/ folder contains example Excel files
+
+The app works offline
+
+✅ Excel Format (for import)
+Your Excel file should contain student information in the following format.  
+You can find example files in the `data/` folder:
+### Example files:
+`diem-danh-sinh-vien-04102024094447.xlsx`
+
+👨‍💻 Author
+Nguyen Hong Phuc (Felix)
+Student of Information Technology
