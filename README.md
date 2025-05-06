@@ -19,20 +19,21 @@
 - 📧 Send warning emails to students with excessive absences
 - 💾 Data persistence with SQLite
 
-## 🗂️ Project Structure
+## 📁 Project Structure
 
-project_root/ 
-├── data/ # Excel files used for import 
-├── main.py # Entry point 
-├── student_app/
-│     ├── data_management/
-│     ├── db/ # SQLite database logic
-│     ├── models/ # Business logic: CRUD, search, sort, etc. 
-│     ├── ui/ # UI components (login, main screen, buttons) 
-│     └── utils/ import excel, delete table, send email
-├── requirements.txt 
-└── README.md
-
+```plaintext
+project_root/
+├── data/                  # Excel files for import
+├── main.py                # Application entry point
+├── student_app/           # Main application package
+│   ├── data_management/   # Data processing and transformation logic
+│   ├── db/                # SQLite database access and operations
+│   ├── models/            # Business logic: CRUD, search, sort, etc.
+│   ├── ui/                # UI components: login, dashboard, buttons
+│   └── utils/             # Helpers: import Excel, delete tables, send email
+├── requirements.txt       # Project dependencies
+└── README.md              # Project documentation
+```
 ## 🚀 Getting Started
 
 1. **Install dependencies**:
