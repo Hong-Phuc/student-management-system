@@ -21,11 +21,17 @@
 
 ## 🗂️ Project Structure
 
-project_root/ │ ├── main.py # Entry point ├── ui/ # UI components (login, main screen, buttons) ├── models/ # Business logic: CRUD, search, sort, etc. ├── db/ # SQLite database logic ├── data/ # Excel files used for import ├── requirements.txt └── README.md
-
-markdown
-Copy
-Edit
+project_root/ 
+├── data/ # Excel files used for import 
+├── main.py # Entry point 
+├── student_app/
+│     ├── data_management/
+│     ├── db/ # SQLite database logic
+│     ├── models/ # Business logic: CRUD, search, sort, etc. 
+│     ├── ui/ # UI components (login, main screen, buttons) 
+│     └── utils/
+├── requirements.txt 
+└── README.md
 
 ## 🚀 Getting Started
 
