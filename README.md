@@ -29,7 +29,7 @@ project_root/
 │     ├── db/ # SQLite database logic
 │     ├── models/ # Business logic: CRUD, search, sort, etc. 
 │     ├── ui/ # UI components (login, main screen, buttons) 
-│     └── utils/
+│     └── utils/ import excel, delete table, send email
 ├── requirements.txt 
 └── README.md
 
