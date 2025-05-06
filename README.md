@@ -36,26 +36,35 @@ project_root/
 ```
 ## 🚀 Getting Started
 
-1. **Install dependencies**:
+1. **Create and activate a virtual environment (recommended)**:
    ```bash
+   python -m venv venv
+   source venv/Scripts/activate     # On Windows + Git Bash
+   # OR
+   venv\Scripts\activate            # On Windows + Command Prompt
+   ```
+2. **Install dependencies**:
+
+   ```
    pip install -r requirements.txt
-   
-2. Run the application:
+3. **Run the application**:
+
    ```
    python main.py
-Note:
+📌 Notes:
 
-All data is stored locally using SQLite
+All data is stored locally using SQLite.
 
-The data/ folder contains example Excel files
+The data/ folder contains example Excel files.
 
-The app works offline
+The app works offline.
 
 ✅ Excel Format (for import)
-Your Excel file should contain student information in the following format.  
-You can find example files in the `data/` folder:
-### Example files:
-`diem-danh-sinh-vien-04102024094447.xlsx`
+Your Excel file should contain student information in the following format.
+You can find example files in the data/ folder:
+
+Example files:
+diem-danh-sinh-vien-04102024094447.xlsx
 
 👨‍💻 Author
 Nguyen Hong Phuc (Felix)
