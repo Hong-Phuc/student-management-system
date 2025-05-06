@@ -15,3 +15,6 @@ __pycache__/
 
 # Thư mục môi trường conda (nếu có)
 .env/
+
+# data
+data.db
