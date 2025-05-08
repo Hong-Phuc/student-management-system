@@ -17,22 +17,52 @@
 - ✏️ Edit and save student information
 - ❌ Delete student entries
 - 📧 Send warning emails to students with excessive absences
+- 🤖 Chatbot integration for quick student information queries
 - 💾 Data persistence with SQLite
+
+## 💬 Chatbot Feature
+
+The application now includes a **Chatbot** for quick student information lookup.  
+The Chatbot uses **Hugging Face API** to generate SQL queries based on user input.  
+
+### ⚙️ **Setup .env file for Chatbot**
+
+1. **Copy the example file to create your own .env file:**
+   ```bash
+   cp .env.example .env
+   ```
+2. Edit the .env file to include your Hugging Face API Key:
+
+```
+HUGGING_FACE_API_KEY=your_hugging_face_api_key
+```
+
+3. Save the file.
+
+💡 Using the Chatbot
+- Click on the "Chat Bot" button in the application interface.
+
+- Enter your query (e.g., "Sinh viên A nghỉ mấy ngày?") and click "Gửi".
+
+- The chatbot will respond with the relevant information.
+
+- Ensure your API key is correctly configured for the chatbot to function.
 
 ## 📁 Project Structure
 
 ```plaintext
 project_root/
+├── config/                # Configuration files (.env, version)
 ├── data/                  # Excel files for import
-├── main.py                # Application entry point
 ├── student_app/           # Main application package
 │   ├── data_management/   # Data processing and transformation logic
 │   ├── db/                # SQLite database access and operations
 │   ├── models/            # Business logic: CRUD, search, sort, etc.
 │   ├── ui/                # UI components: login, dashboard, buttons
-│   └── utils/             # Helpers: import Excel, delete tables, send email
-├── requirements.txt       # Project dependencies
-└── README.md              # Project documentation
+│   └── utils/             # Helpers: import Excel, delete tables, send email, chatbot AI 
+├── main.py                # Application entry point
+├── README.md              # Project documentation
+└── requirements.txt        # Project dependencies
 ```
 ## 🚀 Getting Started
 
