@@ -89,21 +89,15 @@ class StudentApp:
     def on_student_double_click(self, event):
         on_student_double_click(self, event)
 
-    def ask_chatbot(self):
-        question = self.ui.chatbot_entry.get()
+    def ask_chatbot(self, question):
         if not question:
-            self.ui.chatbot_response.config(text="Vui lòng nhập câu hỏi.")
-            return
+            return "Vui lòng nhập câu hỏi."
 
-        # Gọi hàm generate_sql_query từ chatbot.py
+        # Gọi hàm chatbot để lấy phản hồi
         response_text = generate_sql_query(question)
         if "Lỗi" in response_text:
-            self.ui.chatbot_response.config(text=f"Kết quả:\n{response_text}")
-            return
-
-        # Hiển thị kết quả
-        self.ui.chatbot_response.config(text=f"Kết quả:\n{response_text}")
-
+            return "Lỗi kết nối API."
+        return response_text
 if __name__ == "__main__":
     init_db()
     root = tk.Tk()

@@ -1,7 +1,6 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, Toplevel, Entry, Button, Text, Scrollbar, Frame, Label, Canvas, END
 from student_app.models.undo_redo import redo, undo
-from config.version import __version__
 
 class StudentAppUI:
     def __init__(self, root, logged_in_user, app):
@@ -64,20 +63,110 @@ class StudentAppUI:
         self.student_table.bind("<<TreeviewSelect>>", self.app.on_student_select)
         self.student_table.bind("<Double-1>", self.app.on_student_double_click)
 
-        self.chatbot_frame = tk.Frame(self.root, bg="#f0f0f0")
-        self.chatbot_frame.pack(pady=10)
+        # Frame chatbot
+        self.chatbot_button = tk.Button(self.root, text="Chat Bot", command=self.open_chatbot_window, bg="#4CAF50", fg="white")
+        self.chatbot_button.place(x=1100, y=10)
 
-        tk.Label(self.chatbot_frame, text="Chatbot hỏi đáp:", font=("Arial", 14)).pack(side=tk.LEFT, padx=5)
-        self.chatbot_entry = tk.Entry(self.chatbot_frame, width=50)
-        self.chatbot_entry.pack(side=tk.LEFT, padx=5)
+    def open_chatbot_window(self):
+        """Mở cửa sổ chatbot"""
+        chatbot_window = Toplevel(self.root)
+        chatbot_window.title("Chat Bot")
+        chatbot_window.geometry("500x450")
+        chatbot_window.configure(bg="#f0f0f0")
 
-        self.chatbot_button = tk.Button(self.chatbot_frame, text="Hỏi", command=self.app.ask_chatbot, bg="#4CAF50", fg="white")
-        self.chatbot_button.pack(side=tk.LEFT, padx=5)
+        # Main container frame
+        main_frame = Frame(chatbot_window, bg="#f0f0f0")
+        main_frame.pack(fill="both", expand=True, padx=10, pady=10)
 
-        self.chatbot_response = tk.Label(self.chatbot_frame, text="", font=("Arial", 12), wraplength=600, justify=tk.LEFT)
-        self.chatbot_response.pack(pady=5)
+        # Chat display area with scrollbar
+        chat_frame = Frame(main_frame, bg="#f0f0f0")
+        chat_frame.pack(fill="both", expand=True)
 
-        self.version_label = tk.Label(self.root, text=f"Phiên bản: {self.app.__version__}", bg="#f0f0f0", font=("Arial", 10))
+        # Create canvas and scrollbar
+        canvas = Canvas(chat_frame, bg="#f0f0f0", highlightthickness=0)
+        scrollbar = Scrollbar(chat_frame, orient="vertical", command=canvas.yview)
+        scrollable_frame = Frame(canvas, bg="#f0f0f0")
+
+        # Configure scroll region
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(
+                scrollregion=canvas.bbox("all")
+            )
+        )
+
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+
+        self.chat_display = scrollable_frame
+
+        # Input area
+        input_frame = Frame(main_frame, bg="#f0f0f0")
+        input_frame.pack(fill="x", pady=(10, 0))
+
+        self.chat_entry = Entry(input_frame, font=("Arial", 12))
+        self.chat_entry.pack(side="left", fill="x", expand=True, padx=(0, 5))
+        self.chat_entry.bind("<Return>", lambda e: self.send_message())
+
+        self.send_button = Button(input_frame, text="Gửi", bg="#4CAF50", fg="white",
+                                font=("Arial", 12, "bold"), command=self.send_message)
+        self.send_button.pack(side="right")
+
+    def send_message(self):
+        question = self.chat_entry.get()
+        if question:
+            self.display_message(question, "user")
+            self.chat_entry.delete(0, END)
+            
+            response = self.app.ask_chatbot(question)
+            self.display_message(response, "bot")
+
+    def display_message(self, message, sender):
+        """Hiển thị tin nhắn theo kiểu Messenger với căn chỉnh tối ưu"""
+        # Tạo container chứa tin nhắn
+        container = Frame(self.chat_display, bg="#f0f0f0")
+        container.pack(fill="x", pady=2)
+        
+        # Xác định màu sắc và vị trí
+        if sender == "user":
+            bubble_color = "#0084FF"
+            text_color = "white"
+            pack_side = "right"
+            padx = (70, 10)
+            anchor = "ne"
+        else:
+            bubble_color = "#E4E6EB"
+            text_color = "black"
+            pack_side = "left"
+            # Giảm padding phải để đẩy sát lề trái
+            padx = (10, 200)  # Giá trị 200 có thể điều chỉnh tùy nhu cầu
+            anchor = "nw"  # Neo góc trái trên
+        
+        # Tạo bong bóng tin nhắn với kích thước tự nhiên
+        bubble = Frame(container, bg=bubble_color, padx=12, pady=8)
+        bubble.pack(side=pack_side, padx=padx, anchor=anchor)
+        
+        # Thêm nội dung tin nhắn
+        Label(
+            bubble,
+            text=message,
+            font=("Arial", 12),
+            wraplength=300,
+            justify="left",
+            bg=bubble_color,
+            fg=text_color,
+            bd=0
+        ).pack()
+        
+        # Cập nhật giao diện ngay lập tức
+        container.update_idletasks()
+        
+        # Cuộn xuống dưới cùng
+        canvas = container.master.master
+        canvas.yview_moveto(1.0)
 
     def create_input_field(self, parent, label_text, row, column, colspan=1):
         tk.Label(parent, text=label_text, bg="#95fce9").grid(row=row, column=column, padx=5, pady=5)
