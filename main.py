@@ -1,6 +1,6 @@
+import os
 import tkinter as tk
 from tkinter import messagebox
-
 # Các module
 from student_app.db.connectdb import init_db
 
@@ -12,21 +12,23 @@ from student_app.models.select_student import get_selected_student, on_student_s
 from student_app.models.delete_student import delete_student
 from student_app.models.undo_redo import undo, redo
 
-
 from student_app.data_management.data_clearance import relogin_and_clear_data, clear_all_students
 
 from student_app.utils.excel_import import import_excel, extract_subject_name
 from student_app.utils.send_email import on_send_email
 from student_app.utils.delete_all_table import refresh_table
+from student_app.utils.chatbot import generate_sql_query, execute_sql_query
 
 from student_app.ui.ui import StudentAppUI
+
+from dotenv import load_dotenv
+load_dotenv()
 
 class StudentApp:
     def __init__(self, root, logged_in_user):
         self.root = root
         self.logged_in_user = logged_in_user
         self.ui = StudentAppUI(root, logged_in_user, self)
-
         self.load_students()
 
     def logout(self):
@@ -87,6 +89,20 @@ class StudentApp:
     def on_student_double_click(self, event):
         on_student_double_click(self, event)
 
+    def ask_chatbot(self):
+        question = self.ui.chatbot_entry.get()
+        if not question:
+            self.ui.chatbot_response.config(text="Vui lòng nhập câu hỏi.")
+            return
+
+        # Gọi hàm generate_sql_query từ chatbot.py
+        response_text = generate_sql_query(question)
+        if "Lỗi" in response_text:
+            self.ui.chatbot_response.config(text=f"Kết quả:\n{response_text}")
+            return
+
+        # Hiển thị kết quả
+        self.ui.chatbot_response.config(text=f"Kết quả:\n{response_text}")
 
 if __name__ == "__main__":
     init_db()

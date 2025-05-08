@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
-
 from student_app.models.undo_redo import redo, undo
+from config.version import __version__
 
 class StudentAppUI:
     def __init__(self, root, logged_in_user, app):
@@ -63,6 +63,21 @@ class StudentAppUI:
         self.student_table = self.create_student_table()
         self.student_table.bind("<<TreeviewSelect>>", self.app.on_student_select)
         self.student_table.bind("<Double-1>", self.app.on_student_double_click)
+
+        self.chatbot_frame = tk.Frame(self.root, bg="#f0f0f0")
+        self.chatbot_frame.pack(pady=10)
+
+        tk.Label(self.chatbot_frame, text="Chatbot hỏi đáp:", font=("Arial", 14)).pack(side=tk.LEFT, padx=5)
+        self.chatbot_entry = tk.Entry(self.chatbot_frame, width=50)
+        self.chatbot_entry.pack(side=tk.LEFT, padx=5)
+
+        self.chatbot_button = tk.Button(self.chatbot_frame, text="Hỏi", command=self.app.ask_chatbot, bg="#4CAF50", fg="white")
+        self.chatbot_button.pack(side=tk.LEFT, padx=5)
+
+        self.chatbot_response = tk.Label(self.chatbot_frame, text="", font=("Arial", 12), wraplength=600, justify=tk.LEFT)
+        self.chatbot_response.pack(pady=5)
+
+        self.version_label = tk.Label(self.root, text=f"Phiên bản: {self.app.__version__}", bg="#f0f0f0", font=("Arial", 10))
 
     def create_input_field(self, parent, label_text, row, column, colspan=1):
         tk.Label(parent, text=label_text, bg="#95fce9").grid(row=row, column=column, padx=5, pady=5)
