@@ -13,8 +13,7 @@ __pycache__/
 .vscode/
 .idea/
 
-# Thư mục môi trường conda (nếu có)
-.env/
+.env
 
 # data
 data.db
