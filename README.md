@@ -8,11 +8,12 @@
 - 🔐 User login and registration
 - 📁 Import student data from Excel files
 - 📋 Display student info in a table:
-  - Full name
-  - Class
-  - Days absent
-  - Class ID
+  - Semester
+  - Class Code
+  - Subject Name
+  - Student Name
   - Student ID
+  - Days Absent
 - 🔍 Search and sort students
 - ✏️ Edit and save student information
 - ❌ Delete student entries
@@ -24,20 +25,6 @@
 
 The application now includes a **Chatbot** for quick student information lookup.  
 The Chatbot uses **Hugging Face API** to generate SQL queries based on user input.  
-
-### ⚙️ **Setup .env file for Chatbot**
-
-1. **Copy the example file to create your own .env file:**
-   ```bash
-   cp .env.example .env
-   ```
-2. Edit the .env file to include your Hugging Face API Key:
-
-```
-HUGGING_FACE_API_KEY=your_hugging_face_api_key
-```
-
-3. Save the file.
 
 💡 Using the Chatbot
 - Click on the "Chat Bot" button in the application interface.
@@ -62,39 +49,44 @@ project_root/
 │   └── utils/             # Helpers: import Excel, delete tables, send email, chatbot AI 
 ├── main.py                # Application entry point
 ├── README.md              # Project documentation
-└── requirements.txt        # Project dependencies
+└── requirements.txt       # Project dependencies
 ```
 ## 🚀 Getting Started
 
 1. **Create and activate a virtual environment (recommended)**:
    ```bash
    python -m venv venv
-   source venv/Scripts/activate     # On Windows + Git Bash
-   # OR
-   venv\Scripts\activate            # On Windows + Command Prompt
+   venv/Scripts/activate     # Windows
    ```
-2. **Install dependencies**:
+2. **Setup .env file for Chatbot**
+
+    - Open the .env.example file.
+    
+    - Get your Hugging Face API Key [here](https://huggingface.co/settings/tokens).  
+    
+    - Add your API key to the file.
+    - Rename the file to .env (remove .example) and save.
+  
+3. **Install dependencies**:
 
    ```
    pip install -r requirements.txt
-3. **Run the application**:
+4. **Run the application**:
 
    ```
    python main.py
 📌 Notes:
 
-All data is stored locally using SQLite.
+- All data is stored locally using SQLite.
 
-The data/ folder contains example Excel files.
-
-The app works offline.
-
-✅ Excel Format (for import)
+- Excel Format (for import)
 Your Excel file should contain student information in the following format.
 You can find example files in the data/ folder:
+    - Example files: diem-danh-sinh-vien-04102024094447.xlsx
+      
+- The app works offline except for the chatbot feature.
 
-Example files:
-diem-danh-sinh-vien-04102024094447.xlsx
+- Make sure your API key is valid and active.
 
 👨‍💻 Author
 Nguyen Hong Phuc (Felix)
