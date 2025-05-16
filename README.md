@@ -1,6 +1,7 @@
 # Student Management System
 
-> A modern desktop application designed to efficiently manage student data imported from Excel files. Equipped with a responsive interface, AI chatbot integration, and robust data security. Developed as part of the *Specialized Project* course.
+> A modern desktop application designed to efficiently manage student data imported from Excel files. Equipped with a responsive interface, AI chatbot integration, and robust data security.
+> Developed as part of the *Specialized Project* course.
 
 ## 🛠️ Tech Stack
 - Python 3.1+
@@ -64,27 +65,24 @@ project_root/
    ```bash
    python -m venv venv
    venv/Scripts/activate
-   ```
 2. **Setup .env file for Chatbot**
     - Navigate to the config folder:
-      ```
+      ```bash
       cd config/
     - Open the .env.example file.
     
     - Get your Hugging Face API Key [here](https://huggingface.co/settings/tokens).  
     
     - Add your API key to the file.
+
     - Rename the file to .env (remove .example) and save.
   
 3. **Install dependencies**:
-
    ```
    pip install -r requirements.txt
 4. **Run the application**:
-
    ```
    python main.py
-
 ## 📌 Notes
 - All data is stored locally using SQLite.
 - Excel files for import must follow the provided template (see `data/` folder for examples)
