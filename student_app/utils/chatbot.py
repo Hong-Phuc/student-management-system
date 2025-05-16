@@ -6,7 +6,7 @@ import re
 from unidecode import unidecode
 
 # Tải biến môi trường từ file .env
-load_dotenv()
+load_dotenv(os.path.join("config", ".env"))
 
 def generate_sql_query(question):
     try:
