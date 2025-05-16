@@ -1,7 +1,6 @@
 # Student Management System
 
-> A desktop application for managing student data imported from Excel files.  
-> Developed as a personal project for the *Specialized Project* course.
+> A modern desktop application designed to efficiently manage student data imported from Excel files. Equipped with a responsive interface, AI chatbot integration, and robust data security. Developed as part of the *Specialized Project* course.
 
 ## 📌 Features
 
