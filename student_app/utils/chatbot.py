@@ -2,6 +2,8 @@ import os
 import sqlite3
 from dotenv import load_dotenv
 from openai import OpenAI
+import re
+from unidecode import unidecode
 
 # Tải biến môi trường từ file .env
 load_dotenv()
@@ -23,12 +25,13 @@ def generate_sql_query(question):
         Hãy trả lời câu hỏi theo cấu trúc, không in ra câu lệnh SQL, không giải thích gì thêm.
         Câu hỏi: {question}.
         Cấu trúc câu trả lời:
+        - Nếu người dùng chào: "Chào bạn, tôi là chatbot hỗ trợ bạn trong các 
         - Nếu có nghỉ: "Sinh viên [tên] nghỉ [số ngày] ngày: [danh sách ngày nghỉ]".
         - Nếu không nghỉ: "Sinh viên [tên] không nghỉ buổi nào".
-        - Nếu là câu hỏi về ngày nghỉ: "Sinh viên [tên] nghỉ [số ngày] ngày: [danh sách ngày nghỉ]
-        - Nếu là câu hỏi đếm sinh viên: "Có [số lượng] sinh viên có tên [tên]".
+        - Nếu là câu hỏi về ngày nghỉ: "Sinh viên [tên] nghỉ [số ngày] ngày: [danh sách ngày nghỉ]"
+        - Nếu là câu hỏi đếm sinh viên: "Có [số lượng] sinh viên có tên [tên] trong hệ thống".
         - Nếu câu hỏi là tìm kiếm sinh viên: "Các sinh viên có tên [tên] được tìm thấy: [danh sách sinh viên]".
-        - Nếu cơ sở dữ liệu không có sinh viên nào: "Cơ sở dữ liệu hiện đang trống".
+        - Nếu cơ sở dữ liệu không có sinh viên nào: "Cơ sở dữ liệu hiện đang trống, hãy thêm danh sách sinh viên".
         - Nếu không có dữ liệu: "Không có sinh viên nào thỏa mãn điều kiện".
         """
         # Gọi mô hình với câu hỏi
@@ -48,6 +51,29 @@ def generate_sql_query(question):
 
         # Loại bỏ ký hiệu không mong muốn
         response_text = response_text.replace("```sql", "").replace("```", "").strip()
+
+        # Nếu là câu hỏi về số lượng sinh viên, thực hiện truy vấn SQL
+        if "có mấy sinh viên" in question.lower() or "có bao nhiêu sinh viên" in question.lower():
+            try:
+                # Trích xuất tên từ câu hỏi, loại bỏ dấu câu và chuẩn hóa tên
+                name_raw = question.lower().split("tên")[-1]
+                name = re.sub(r'[^a-zA-ZÀ-ỹ\s]', '', name_raw).strip()
+                name = ' '.join([w.capitalize() for w in name.split()])
+                name_ascii = unidecode(name).lower()
+                if name:
+                    with sqlite3.connect('data.db') as conn:
+                        cursor = conn.cursor()
+                        cursor.execute("SELECT student_name FROM students")
+                        all_names = cursor.fetchall()
+                        count = 0
+                        for (full_name,) in all_names:
+                            last_name = full_name.strip().split()[-1]
+                            last_name_ascii = unidecode(last_name).lower()
+                            if last_name_ascii == name_ascii:
+                                count += 1
+                        response_text = f"Có {count} sinh viên tên {name} trong hệ thống"
+            except Exception as e:
+                print(f"Lỗi khi đếm số lượng sinh viên: {e}")
 
         return response_text
     except Exception as e:

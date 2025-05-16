@@ -1,6 +1,7 @@
 import sqlite3
 import tkinter as tk
 from tkinter import messagebox
+import bcrypt
 
 class LoginRegisterApp:
     def __init__(self, root, student_app_class):
@@ -71,16 +72,18 @@ class LoginRegisterApp:
 
         conn = sqlite3.connect('data.db')
         c = conn.cursor()
-        c.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
-        user = c.fetchone()
+        c.execute("SELECT password FROM users WHERE username = ?", (username,))
+        result = c.fetchone()
         conn.close()
 
-        if user:
-            messagebox.showinfo("", "Đăng nhập thành công!")
-            self.logged_in_user = username
-            self.show_student_info_screen()  # Chuyển sang giao diện quản lý sinh viên
-        else:
-            messagebox.showerror("", "Sai tài khoản hoặc mật khẩu.")
+        if result:
+            hashed = result[0]
+            if bcrypt.checkpw(password.encode('utf-8'), hashed.encode('utf-8')):
+                messagebox.showinfo("", "Đăng nhập thành công!")
+                self.logged_in_user = username
+                self.show_student_info_screen()  # Chuyển sang giao diện quản lý sinh viên
+                return
+        messagebox.showerror("", "Sai tài khoản hoặc mật khẩu.")
 
     def register(self):
         """Hàm xử lý đăng ký tài khoản mới"""
@@ -88,10 +91,12 @@ class LoginRegisterApp:
         new_password = self.new_password_entry.get()
 
         if new_username and new_password:
+            # Hash password bằng bcrypt
+            hashed = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
             conn = sqlite3.connect('data.db')
             c = conn.cursor()
             try:
-                c.execute("INSERT INTO users (username, password) VALUES (?, ?)", (new_username, new_password))
+                c.execute("INSERT INTO users (username, password) VALUES (?, ?)", (new_username, hashed.decode('utf-8')))
                 conn.commit()
                 messagebox.showinfo("", "Đăng ký thành công!")
                 self.login_screen()  # Quay lại màn hình đăng nhập

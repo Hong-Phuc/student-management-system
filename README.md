@@ -5,7 +5,7 @@
 
 ## 📌 Features
 
-- 🔐 User login and registration
+- 🔐 **User login and registration** (passwords are securely hashed with bcrypt)
 - 📁 Import student data from Excel files
 - 📋 Display student info in a table:
   - Semester
@@ -18,22 +18,21 @@
 - ✏️ Edit and save student information
 - ❌ Delete student entries
 - 📧 Send warning emails to students with excessive absences
-- 🤖 Chatbot integration for quick student information queries
-- 💾 Data persistence with SQLite
+- 🤖 **AI Chatbot** for quick student information queries (Hugging Face API)
+- 💾 Data persistence with SQLite (works offline except chatbot)
+- 🖥️ Responsive interface, modern dropdown tool menu
+
+## 🛡️ Security
+- User passwords are **hashed with bcrypt** before being stored in the database
+- No plain-text passwords are ever saved
 
 ## 💬 Chatbot Feature
 
-The application now includes a **Chatbot** for quick student information lookup.  
-The Chatbot uses **Hugging Face API** to generate SQL queries based on user input.  
-
-💡 Using the Chatbot
-- Click on the "Chat Bot" button in the application interface.
-
-- Enter your query (e.g., "Sinh viên A nghỉ mấy ngày?") and click "Gửi".
-
-- The chatbot will respond with the relevant information.
-
-- Ensure your API key is correctly configured for the chatbot to function.
+The application includes a **Chatbot** for quick student information lookup.
+- Click the "Chat Bot" button (bottom right corner)
+- Enter your query (e.g., "Có mấy sinh viên tên Ân?", "Sinh viên A nghỉ mấy ngày?")
+- The chatbot will respond with relevant information in Vietnamese
+- Requires a valid Hugging Face API key in your `.env` file
 
 ## 📁 Project Structure
 
@@ -44,19 +43,20 @@ project_root/
 ├── student_app/           # Main application package
 │   ├── data_management/   # Data processing and transformation logic
 │   ├── db/                # SQLite database access and operations
-│   ├── models/            # Business logic: CRUD, search, sort, etc.
-│   ├── ui/                # UI components: login, dashboard, buttons
+│   ├── models/            # Business logic: CRUD, login, registration, etc.
+│   ├── ui/                # UI components: login, dashboard, chatbot, buttons
 │   └── utils/             # Helpers: import Excel, delete tables, send email, chatbot AI 
 ├── main.py                # Application entry point
 ├── README.md              # Project documentation
 └── requirements.txt       # Project dependencies
 ```
+
 ## 🚀 Getting Started
 
-1. **Create and activate a virtual environment (recommended)**:
+1. **Create and activate a virtual environment (recommended):**
    ```bash
    python -m venv venv
-   venv/Scripts/activate     # Windows
+   venv/Scripts/activate
    ```
 2. **Setup .env file for Chatbot**
 
@@ -75,9 +75,13 @@ project_root/
 
    ```
    python main.py
-📌 Notes:
 
+## 📌 Notes
 - All data is stored locally using SQLite.
+- Excel files for import must follow the provided template (see `data/` folder for examples)
+- The app is responsive: you can maximize the window but cannot shrink it below the default size
+- The app works offline except for the chatbot feature (which requires internet and a valid API key)
+- Passwords are always stored securely (bcrypt hash)
 
 - Excel Format (for import)
 Your Excel file should contain student information in the following format.
