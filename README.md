@@ -2,6 +2,14 @@
 
 > A modern desktop application designed to efficiently manage student data imported from Excel files. Equipped with a responsive interface, AI chatbot integration, and robust data security. Developed as part of the *Specialized Project* course.
 
+## 🛠️ Tech Stack
+- Python 3.1+
+- SQLite for local data storage
+- Bcrypt for password hashing
+- Hugging Face API for chatbot integration
+- OpenPyXL for Excel file handling
+- Tkinter for GUI
+
 ## 📌 Features
 
 - 🔐 **User login and registration** (passwords are securely hashed with bcrypt)
@@ -58,7 +66,9 @@ project_root/
    venv/Scripts/activate
    ```
 2. **Setup .env file for Chatbot**
-
+    - Navigate to the config folder:
+      ```
+      cd config/
     - Open the .env.example file.
     
     - Get your Hugging Face API Key [here](https://huggingface.co/settings/tokens).  
@@ -92,5 +102,6 @@ You can find example files in the data/ folder:
 - Make sure your API key is valid and active.
 
 👨‍💻 Author
-Nguyen Hong Phuc (Felix)
-Student of Information Technology
+- **Nguyen Hong Phuc (Felix)**
+- Student of Information Technology
+- [GitHub](https://github.com/Hong-Phuc) | [LinkedIn](https://www.linkedin.com/in/nguyen-hong-phuc)
