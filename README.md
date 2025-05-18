@@ -60,11 +60,16 @@ project_root/
 ```
 
 ## 🚀 Getting Started
-
+  ```bash
+  cd student-management-system
+  ```
 1. **Create and activate a virtual environment (recommended):**
    ```bash
    python -m venv venv
    venv/Scripts/activate
+3. **Install dependencies**:
+   ```
+   pip install -r requirements.txt
 2. **Setup .env file for Chatbot**
     - Navigate to the config folder:
       ```bash
@@ -76,10 +81,6 @@ project_root/
     - Add your API key to the file.
 
     - Rename the file to .env (remove .example) and save.
-  
-3. **Install dependencies**:
-   ```
-   pip install -r requirements.txt
 4. **Run the application**:
    ```
    python main.py
