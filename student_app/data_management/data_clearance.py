@@ -2,6 +2,7 @@
 import sqlite3
 import tkinter as tk
 from tkinter import messagebox
+import bcrypt
 
 def clear_all_students(app):
     """Xóa sạch toàn bộ dữ liệu trong bảng students."""
@@ -44,14 +45,14 @@ def relogin_and_clear_data(app):
             messagebox.showerror("Login Error", "Bạn phải đăng nhập lại bằng tài khoản đã đăng nhập ban đầu.")
             return
 
-        # Kiểm tra thông tin đăng nhập trong cơ sở dữ liệu
+        # Lấy hash mật khẩu từ database
         conn = sqlite3.connect('data.db')
         c = conn.cursor()
-        c.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
-        user = c.fetchone()
+        c.execute("SELECT password FROM users WHERE username = ?", (username,))
+        result = c.fetchone()
         conn.close()
 
-        if user:
+        if result and bcrypt.checkpw(password.encode('utf-8'), result[0].encode('utf-8')):
             clear_all_students(app)  # Xóa tất cả dữ liệu nếu đăng nhập thành công
             relogin_window.destroy()
         else:

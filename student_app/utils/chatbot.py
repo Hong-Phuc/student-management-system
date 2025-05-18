@@ -10,31 +10,57 @@ load_dotenv(os.path.join("config", ".env"))
 
 def generate_sql_query(question):
     try:
-        # Lấy API key từ môi trường
         api_key = os.getenv("HUGGING_FACE_API_KEY")
-
-        # Khởi tạo client với API từ Fireworks Inference
         client = OpenAI(
             api_key=api_key,
             base_url="https://router.huggingface.co/fireworks-ai/inference/v1"
         )
 
-        # Prompt tối ưu hóa để trả về câu trả lời hoàn chỉnh
+        # Nếu là câu hỏi về lớp của sinh viên
+        match_class = re.search(r"sinh viên (.+?) học lớp nào", question.lower())
+        if match_class:
+            student_name = match_class.group(1).strip().title()
+            with sqlite3.connect('data.db') as conn:
+                cursor = conn.cursor()
+                cursor.execute("SELECT class_code FROM students WHERE student_name = ?", (student_name,))
+                result = cursor.fetchone()
+                if result:
+                    class_code = result[0]
+                    return f"Sinh viên {student_name} học lớp {class_code}."
+                else:
+                    return f"Không tìm thấy sinh viên {student_name}."
+
+        # Nếu là câu hỏi về số ngày nghỉ của sinh viên
+        match = re.search(r"sinh viên (.+?) nghỉ mấy ngày", question.lower())
+        if match:
+            student_name = match.group(1).strip().title()
+            with sqlite3.connect('data.db') as conn:
+                cursor = conn.cursor()
+                cursor.execute("SELECT so_ngay_nghi, thoi_gian_nghi FROM students WHERE student_name = ?", (student_name,))
+                result = cursor.fetchone()
+                if result:
+                    so_ngay_nghi, thoi_gian_nghi = result
+                    if so_ngay_nghi > 0:
+                        # Xử lý danh sách ngày nghỉ và số tiết, mỗi ngày 1 dòng
+                        ngay_nghi_list = [ngay.strip() for ngay in thoi_gian_nghi.split(";") if ngay.strip()]
+                        ngay_nghi_str = "\n".join(ngay_nghi_list)
+                        return f"Sinh viên {student_name} nghỉ {so_ngay_nghi} ngày:\n{ngay_nghi_str}"
+                    else:
+                        return f"Sinh viên {student_name} không nghỉ buổi nào."
+                else:
+                    return f"Không tìm thấy sinh viên {student_name}."
+
+        # Prompt AI cho các câu hỏi khác
         prompt = f"""
-        Bạn là một chuyên gia SQL và trả lời câu hỏi. 
-        Hãy trả lời câu hỏi theo cấu trúc, không in ra câu lệnh SQL, không giải thích gì thêm.
-        Câu hỏi: {question}.
-        Cấu trúc câu trả lời:
-        - Nếu người dùng chào: "Chào bạn, tôi là chatbot hỗ trợ bạn trong các 
-        - Nếu có nghỉ: "Sinh viên [tên] nghỉ [số ngày] ngày: [danh sách ngày nghỉ]".
-        - Nếu không nghỉ: "Sinh viên [tên] không nghỉ buổi nào".
-        - Nếu là câu hỏi về ngày nghỉ: "Sinh viên [tên] nghỉ [số ngày] ngày: [danh sách ngày nghỉ]"
-        - Nếu là câu hỏi đếm sinh viên: "Có [số lượng] sinh viên có tên [tên] trong hệ thống".
-        - Nếu câu hỏi là tìm kiếm sinh viên: "Các sinh viên có tên [tên] được tìm thấy: [danh sách sinh viên]".
-        - Nếu cơ sở dữ liệu không có sinh viên nào: "Cơ sở dữ liệu hiện đang trống, hãy thêm danh sách sinh viên".
-        - Nếu không có dữ liệu: "Không có sinh viên nào thỏa mãn điều kiện".
-        """
-        # Gọi mô hình với câu hỏi
+Bạn là một chatbot hỗ trợ quản lý sinh viên. 
+Chỉ trả lời ngắn gọn, tự nhiên, không trả về JSON, không giải thích, không lặp lại câu hỏi.
+Ví dụ:
+Hỏi: Có mấy sinh viên tên Anh?
+Trả lời: Có 3 sinh viên tên Anh trong hệ thống.
+---
+Câu hỏi: {question}
+Trả lời:
+"""
         completion = client.chat.completions.create(
             model="accounts/fireworks/models/deepseek-v3-0324",
             messages=[
@@ -44,12 +70,8 @@ def generate_sql_query(question):
                 }
             ]
         )
-
-        # Lấy câu trả lời từ kết quả trả về
         message = completion.choices[0].message
         response_text = message.content.strip()
-
-        # Loại bỏ ký hiệu không mong muốn
         response_text = response_text.replace("```sql", "").replace("```", "").strip()
 
         # Nếu là câu hỏi về số lượng sinh viên, thực hiện truy vấn SQL
